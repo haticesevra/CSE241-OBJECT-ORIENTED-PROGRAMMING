@@ -1,0 +1,67 @@
+
+	WHAT IS NEW IN THE HOMEWORK?
+	
+	1- I converted all the vectors in the class to dynamic array. I also used the nullptr keyword.
+		Cell ** hexCells=nullptr;
+		int **allMoves=nullptr;	//to find winner path
+		int **board_won=nullptr;
+
+	2 - play function
+	    ^^play() -> It makes the computer move by calling the computer_move function.
+	    ^^play(string command)-> We could actually call it coordinate instead of command. I said 'command' in case the user enters commands such as SAVE, LOAD, UNDO instead of coordinates.
+					This function make the move by going to analyze_command and get the coordinate.
+
+	3 - While the board is printing in every move
+  		cout<<*this; line calls	
+		friend ostream& operator<<(ostream& outS, Hex& H); function. This function also calls the print_board function and prints the game to the screen.
+
+	4 - If the user enters the SAVE command instead of the coordinate
+		saveFile<<*this; line calls
+		friend ofstream& operator<<(ofstream& file, Hex& H);  function. And game data saved in the file which entered by the user.
+	
+	5 -if the user enters the LOAD command instead of the coordinate;
+    		File>>*this; line calls
+  		ifstream& operator>>(ifstream& file, Hex& H); function. The information in the file entered by the user is transferred to the game.
+
+	6 - If the player wants to compare the game they are playing with the non-empty cells in a previously played game, they must enter the command COMPARE GAMENUMBER. 
+		like 'COMPARE 1' or 'COMPARE 2'
+
+		If the user enters the COMPARE 2 command instead of the coordinate; 
+		//in main
+		if(game3.otherObj == 2){
+			if(game2==game3) 	//overloaded
+				cout<"Current game (game3) has more marked cells than game2
+			else
+				cout<<"Game2 has more marked cells than the current game (game3) !!!"
+		}
+		
+		friend bool operator== (const Hex &otherObj, const Hex &currentObj);
+
+	7- I use explicit keyword with constructors
+		explicit Hex (int board_size, int user);	
+
+	8 - I overload copy assignment operator but I couldn't find a situation that i have to use it.
+		Hex& operator=(const Hex& temp);
+
+	9 - if the user enters the UNDO command instead of the coordinate; **
+		If it is computer-user game, the  Hex operator--(); function is called by --*this .
+		If it is user1-user2 game,  the  Hex operator--(int ignore); function is called by *this--;.
+		
+	-----------------------------
+		** Burada not düşmek istediğim bir konu var. Ödevi ilk yaptığım zaman -- operatörünü constructor return eden bir overloading fonksiyonu şeklinde oluşturmuştum.
+		Daha sonrasında ödevdeki dinamik kısım için class'ta destructor kullandım, big three'den dolayı copy constructor da yazmam gerekiyordu. 
+		-- operatörü Hex tipinde bir şey döndürdüğü için copy constructorı bu operatörün içinde kullanmak üzere oluşturdum.
+
+			Hex Hex :: operator--(){
+					//...
+				
+				return *this;	//buradan copy constructor'a gidip bu nesnenin özelliklerini, undo edilmiş haline kopyalıyor
+			}
+
+		Sonradan duyduklarıma göre bazıları big three'ye uymak için copy constructor'ı yazıp main'de basit bir örnekle constructor'ın çalıştığını göstermiş. 
+		Ödev pdf'inden de hangisi istediğinize dair net bir sonuca varamadım.
+		Ödevimde UNDO komutu da copy constructor da sorunsuz bir şekilde çalışıyor bu nedenle bir şeyleri değiştirme gereği duymadım. 
+		
+	------------------------------
+
+	10 - Since the find_score function is not working properly, I leave it as a comment line.
